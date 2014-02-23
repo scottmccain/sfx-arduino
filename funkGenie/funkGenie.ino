@@ -86,11 +86,11 @@ int setFrequency(float f)
 }
 
 // Initialises the wavetable with either quarter of sine, trianlge or sawtooth wave
-// Square wave is not wavetable based in this example
+// Square and sawtooth waves are not wavetable based in this example
 int initTable(unsigned int mode)
 {
   dac_mode = mode;
-  if(dac_mode == SQUARE)
+  if(dac_mode == SQUARE || dac_mode == SAWTOOTH)
     return 0;
 
   TcChannel *t = &(TC0->TC_CHANNEL)[0];                // pointer to TC0 registers for its channel 0
@@ -105,9 +105,6 @@ int initTable(unsigned int mode)
         break;
       case TRIANGLE:
         iTable[x] = x + tableSize;
-        break;
-      case SAWTOOTH:
-        iTable[x] = x / 2;
         break;
       default:
         iTable[x] = tableSize - 1;
@@ -126,26 +123,11 @@ inline unsigned int getSample(unsigned int idx)
   if(idx < tableSize)
     return iTable[idx];
   if(idx < tableSize2)
-  {
-    if(dac_mode == SAWTOOTH)
-      return iTable[idx - tableSize] + tableSize05;
-    else
       return iTable[tableSize - (idx - tableSize + 1)];
-  }
   if(idx < tableSize3)
-  {
-    if(dac_mode == SAWTOOTH)
-      return iTable[idx - tableSize2] + tableSize;
-    else
       return tableSize2 - iTable[idx - tableSize2];
-  }
   else
-  {
-    if(dac_mode == SAWTOOTH)
-      return iTable[idx - tableSize3] + tableSize15;
-    else
       return tableSize2 - iTable[tableSize - (idx - tableSize3 + 1)];
-  }
 }
 
 // Returns interpolated sample based on angle
@@ -261,21 +243,23 @@ void ADC_Handler(void)
     sptr = (sptr + 1) & BUFMASK;                       // move pointer
   }
 
-  // Output DAC max or min depending on cycle_count if mode is square wave
-  if(dac_mode == SQUARE)
+  if(dac_mode == SINEWAVE || dac_mode == TRIANGLE)
+  {
+      float deg = (float)cycle_count * dac_degreesPerStep;
+      dac_write(iFunc(deg));
+  }
+  else if(dac_mode == SQUARE)
   {
       if(cycle_count <= samplesPerCycle / 2)
         dac_write(tableSize2 - 1);
       else
         dac_write(0);
   }
-  else
-  // Output an interpolated sample from wavetable based on the current angle
+  else if(dac_mode == SAWTOOTH)
   {
-    float deg = (float)cycle_count * dac_degreesPerStep;
-    dac_write(iFunc(deg));
+      dac_write(cycle_count * (tableSize2 / samplesPerCycle));
   }
-
+  
   // Update cycle_count
   if(cycle_count < samplesPerCycle)
     cycle_count++;
@@ -295,7 +279,6 @@ unsigned int wave_shape = 0;
 void loop()
 {
   initTable(wave_shape);
-
   for(float f = 50.0f; f < 5000.0f; f += 5.0f)
   {
     setFrequency(f);
@@ -310,5 +293,6 @@ void loop()
   wave_shape++;
   if(wave_shape > 3)
     wave_shape = 0;
+
 }
 
