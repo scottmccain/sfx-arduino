@@ -26,8 +26,8 @@ funkGenie
 
   funkGenie is an example of a function generator running on Arduino Due. It
   is based on user MarkT's work at arduino forums on "Example of driving ADC
-  and DAC from timer for regular sampling" (http://forum.arduino.cc/index.php?
-  topic=205096.0)
+  and DAC from timer for regular sampling":
+  http://forum.arduino.cc/index.php?topic=205096.0
   
   It can output sine, square, triangle and sawtooth waves. All except square
   output are wavetable based. Linear interpolation is also done if necessary.
