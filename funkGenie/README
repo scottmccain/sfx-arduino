@@ -29,10 +29,10 @@ funkGenie
   and DAC from timer for regular sampling":
   http://forum.arduino.cc/index.php?topic=205096.0
   
-  It can output sine, square, triangle and sawtooth waves. All except square
-  output are wavetable based. Linear interpolation is also done if necessary.
-  It is far from perfect but does output fairly decent waveshapes up to a few
-  kHz. At higher frequencies the shape of the wave gets less samples per cycle
-  and will be distorted.
+  It can output sine, square, triangle and sawtooth waves. Sine and triangle
+  are wavetable based while square and sawtooth are calculated directly.
+  Linear interpolation is also done if necessary. It is far from perfect but
+  does output fairly decent waveshapes up to a few kHz. At higher frequencies
+  the shape of the wave gets less samples per cycle and will be distorted.
   
   Feel free to contact me if you have improvement ideas.
