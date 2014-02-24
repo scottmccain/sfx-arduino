@@ -22,7 +22,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 
-funkGenie
+funkGenie 1.0.0
 
   funkGenie is an example of a function generator running on Arduino Due. It
   is based on user MarkT's work at arduino forums on "Example of driving ADC
