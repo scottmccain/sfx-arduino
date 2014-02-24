@@ -38,7 +38,7 @@ const unsigned int SAWTOOTH =    3;
 unsigned int tableSize, tableSize2, tableSize3;             // Table size and multiples
 unsigned int idxMask, maxVal;                               // Index mask and maximum value of DAC output
 float degPerSample, timePerSample;                          // Degrees per sample + time per sample
-volatile float dac_hz, dac_t, dac_degreesPerStep;                    // Frequency, cycle time + degrees per sample
+volatile float dac_hz, dac_t, dac_degreesPerStep;           // Frequency, cycle time + degrees per sample
 volatile unsigned int dac_mode, samplesPerCycle, halfCycle; // DAC mode, samples per cycle and samples per half cycle
 volatile int cycle_count = 0;                               // Cycle counter
 unsigned int *iTable = NULL;                                // Wavetable storage
