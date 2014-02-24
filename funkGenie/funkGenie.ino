@@ -66,6 +66,9 @@ int initGlobals()
   degPerSample = (float)tableSize / 90.0f;
   timePerSample = 1.0f / (float)sampleRate;
  
+  if(iTable)
+    free(iTable);
+
   iTable = (unsigned int*)malloc(tableSize * sizeof(unsigned int));
 
   setFrequency(197.3f);
