@@ -41,7 +41,7 @@ float degPerSample, timePerSample;                          // Degrees per sampl
 float dac_hz, dac_t, dac_degreesPerStep;                    // Frequency, cycle time + degrees per sample
 volatile unsigned int dac_mode, samplesPerCycle, halfCycle; // DAC mode, samples per cycle and samples per half cycle
 volatile int cycle_count = 0;                               // Cycle counter
-unsigned int *iTable;                                       // Wavetable storage
+unsigned int *iTable = NULL;                                // Wavetable storage
 
 // Circular buffer, power of two.
 #define BUFSIZE 0x400
