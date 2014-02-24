@@ -37,7 +37,6 @@ const unsigned int SAWTOOTH =    3;
 // Global variables
 unsigned int dac_mode, samplesPerCycle;                     // DAC mode and samples per cycle
 unsigned int tableSize, tableSize2, tableSize3, tableSize4; // Table size and multiples
-unsigned int tableSize05, tableSize15;                      // Table size and multiples
 float degPerSample, timePerSample;                          // Degrees per sample + time per sample
 float dac_hz, dac_t, dac_degreesPerStep;                    // Frequency, cycle time + degrees per sample
 unsigned int *iTable;                                       // Wavetable storage
@@ -62,8 +61,6 @@ int initGlobals()
   tableSize2 = 2 * tableSize;
   tableSize3 = 3 * tableSize;
   tableSize4 = 4 * tableSize;
-  tableSize05 = tableSize / 2;
-  tableSize15 = tableSize05 * 3;
   degPerSample = (float)tableSize / 90.0f;
   timePerSample = 1.0f / (float)sampleRate;
  
