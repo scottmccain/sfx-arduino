@@ -1,0 +1,7 @@
+2014-02-24 Version 1.0.1
+  
+  * Triangle wave is now calculated directly instead of using wavetable.
+
+2014-02-23 Version 1.0.0
+
+  * Initial release
