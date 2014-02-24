@@ -35,9 +35,9 @@ const unsigned int TRIANGLE =    2;
 const unsigned int SAWTOOTH =    3;
 
 // Global variables
-unsigned int dac_mode, samplesPerCycle;                     // DAC mode and samples per cycle
+unsigned int dac_mode, samplesPerCycle, halfCycle;          // DAC mode and samples per cycle
 unsigned int tableSize, tableSize2, tableSize3;             // Table size and multiples
-unsigned int idxMask;
+unsigned int idxMask, maxVal;
 float degPerSample, timePerSample;                          // Degrees per sample + time per sample
 float dac_hz, dac_t, dac_degreesPerStep;                    // Frequency, cycle time + degrees per sample
 unsigned int *iTable;                                       // Wavetable storage
@@ -62,6 +62,7 @@ int initGlobals()
   tableSize2 = 2 * tableSize;
   tableSize3 = 3 * tableSize;
   idxMask = 4 * tableSize - 1;
+  maxVal = tableSize2 - 1;
   degPerSample = (float)tableSize / 90.0f;
   timePerSample = 1.0f / (float)sampleRate;
  
@@ -79,6 +80,7 @@ int setFrequency(float f)
   dac_t = 1.0f / dac_hz;
   dac_degreesPerStep = 360.0f / (dac_t / timePerSample);
   samplesPerCycle = dac_t / timePerSample;
+  halfCycle = samplesPerCycle / 2;
   
   return 0;
 }
@@ -248,8 +250,8 @@ void ADC_Handler(void)
   }
   else if(dac_mode == SQUARE)
   {
-      if(cycle_count <= samplesPerCycle / 2)
-        dac_write(tableSize2 - 1);
+      if(cycle_count <= halfCycle)
+        dac_write(maxVal);
       else
         dac_write(0);
   }
