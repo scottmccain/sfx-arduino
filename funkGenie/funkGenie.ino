@@ -35,7 +35,7 @@ const unsigned int TRIANGLE =    2;
 const unsigned int SAWTOOTH =    3;
 
 // Global variables
-unsigned int dac_mode, samplesPerCycle, halfCycle;          // DAC mode and samples per cycle
+volatile unsigned int dac_mode, samplesPerCycle, halfCycle; // DAC mode and samples per cycle
 unsigned int tableSize, tableSize2, tableSize3;             // Table size and multiples
 unsigned int idxMask, maxVal;
 float degPerSample, timePerSample;                          // Degrees per sample + time per sample
