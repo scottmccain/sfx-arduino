@@ -88,8 +88,8 @@ int setFrequency(float f)
   return 0;
 }
 
-// Initialises the wavetable with either quarter of sine, trianlge or sawtooth wave
-// Square and sawtooth waves are not wavetable based in this example
+// Initialises the wavetable with quarter of sine wave
+// Square, triangle and sawtooth waves are not wavetable based in this example
 int initTable(unsigned int mode)
 {
   dac_mode = mode;
@@ -106,11 +106,8 @@ int initTable(unsigned int mode)
       case SINEWAVE:
         iTable[x] = floor(((sin(((float)x / (float)tableSize) * HALF_PI) + 1.0f) * tableSize));
         break;
-      case TRIANGLE:
-        iTable[x] = x + tableSize;
-        break;
       default:
-        iTable[x] = tableSize - 1;
+        iTable[x] = tableSize;
         return 1;
     }
   }
@@ -246,7 +243,7 @@ void ADC_Handler(void)
     sptr = (sptr + 1) & BUFMASK;                       // move pointer
   }
 
-  if(dac_mode == SINEWAVE || dac_mode == TRIANGLE)
+  if(dac_mode == SINEWAVE)
   {
       float deg = (float)cycle_count * dac_degreesPerStep;
       dac_write(iFunc(deg));
@@ -257,6 +254,14 @@ void ADC_Handler(void)
         dac_write(maxVal);
       else
         dac_write(0);
+  }
+  else if(dac_mode == TRIANGLE)
+  {
+    unsigned int ramp = 2 * cycle_count * (tableSize2 / samplesPerCycle);
+    if(cycle_count < halfCycle)
+      dac_write(ramp)
+    else
+      dac_write(tableSize2 - (ramp - tableSize2);
   }
   else if(dac_mode == SAWTOOTH)
   {
