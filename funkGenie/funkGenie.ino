@@ -35,13 +35,13 @@ const unsigned int TRIANGLE =    2;
 const unsigned int SAWTOOTH =    3;
 
 // Global variables
-volatile unsigned int dac_mode, samplesPerCycle, halfCycle; // DAC mode and samples per cycle
 unsigned int tableSize, tableSize2, tableSize3;             // Table size and multiples
-unsigned int idxMask, maxVal;
+unsigned int idxMask, maxVal;                               // Index mask and maximum value of DAC output
 float degPerSample, timePerSample;                          // Degrees per sample + time per sample
 float dac_hz, dac_t, dac_degreesPerStep;                    // Frequency, cycle time + degrees per sample
+volatile unsigned int dac_mode, samplesPerCycle, halfCycle; // DAC mode, samples per cycle and samples per half cycle
+volatile int cycle_count = 0;                               // Cycle counter
 unsigned int *iTable;                                       // Wavetable storage
-volatile int cycle_count = 0;
 
 // Circular buffer, power of two.
 #define BUFSIZE 0x400
