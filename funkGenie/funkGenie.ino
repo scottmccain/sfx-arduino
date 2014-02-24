@@ -52,7 +52,7 @@ volatile int sptr = 0;
 // Interpolates between a and b based on x (0.0... 1.0)
 inline float linterp(float a, float b, float x)
 {
-  return  a * (1 - x) + b * x;
+  return  a * (1.0f - x) + b * x;
 }
 
 // Initialises global variables and allocates memory for wavetable
@@ -121,11 +121,11 @@ inline unsigned int getSample(unsigned int idx)
   if(idx < tableSize)
     return iTable[idx];
   if(idx < tableSize2)
-      return iTable[tableSize - (idx - tableSize + 1)];
+    return iTable[tableSize - (idx - tableSize + 1)];
   if(idx < tableSize3)
-      return tableSize2 - iTable[idx - tableSize2];
+    return tableSize2 - iTable[idx - tableSize2];
   else
-      return tableSize2 - iTable[tableSize - (idx - tableSize3 + 1)];
+    return tableSize2 - iTable[tableSize - (idx - tableSize3 + 1)];
 }
 
 // Returns interpolated sample based on angle
