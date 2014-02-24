@@ -35,7 +35,7 @@ const unsigned int TRIANGLE =    2;
 const unsigned int SAWTOOTH =    3;
 
 // Global variables
-unsigned int tableSize, tableSize2, tableSize3;             // Table size and multiples
+unsigned int tableSize, tableSize2, tableSize3, tableSize4; // Table size and multiples
 unsigned int idxMask, maxVal;                               // Index mask and maximum value of DAC output
 float degPerSample, timePerSample;                          // Degrees per sample + time per sample
 volatile float dac_hz, dac_t, dac_degreesPerStep;           // Frequency, cycle time + degrees per sample
@@ -61,6 +61,7 @@ int initGlobals()
   tableSize = pow(2, sampleBits - 1);
   tableSize2 = 2 * tableSize;
   tableSize3 = 3 * tableSize;
+  tableSize4 = 4 * tableSize;
   idxMask = 4 * tableSize - 1;
   maxVal = tableSize2 - 1;
   degPerSample = (float)tableSize / 90.0f;
@@ -257,11 +258,11 @@ void ADC_Handler(void)
   }
   else if(dac_mode == TRIANGLE)
   {
-    unsigned int ramp = 2 * cycle_count * (tableSize2 / samplesPerCycle);
+    unsigned int ramp = cycle_count * (tableSize2 / halfCycle);
     if(cycle_count < halfCycle)
       dac_write(ramp)
     else
-      dac_write(tableSize2 - (ramp - tableSize2);
+      dac_write(tableSize4 - ramp);
   }
   else if(dac_mode == SAWTOOTH)
   {
