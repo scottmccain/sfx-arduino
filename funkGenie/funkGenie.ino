@@ -36,10 +36,10 @@ const unsigned int SAWTOOTH =    3;
 
 // Global variables
 unsigned int tableSize, tableSize2, tableSize3, tableSize4; // Table size and multiples
-unsigned int idxMask, maxVal;                               // Index mask and maximum value of DAC output
+unsigned int dac_mode, idxMask, maxVal;                               // Index mask and maximum value of DAC output
 float degPerSample, timePerSample;                          // Degrees per sample + time per sample
 volatile float dac_hz, dac_t, dac_degreesPerStep;           // Frequency, cycle time + degrees per sample
-volatile unsigned int dac_mode, samplesPerCycle, halfCycle; // DAC mode, samples per cycle and samples per half cycle
+volatile unsigned int samplesPerCycle, halfCycle; // DAC mode, samples per cycle and samples per half cycle
 volatile int cycle_count = 0;                               // Cycle counter
 unsigned int *iTable = NULL;                                // Wavetable storage
 
@@ -94,7 +94,7 @@ int setFrequency(float f)
 int initTable(unsigned int mode)
 {
   dac_mode = mode;
-  if(dac_mode == SQUARE || dac_mode == SAWTOOTH)
+  if(dac_mode != SINEWAVE)
     return 0;
 
   TcChannel *t = &(TC0->TC_CHANNEL)[0];                // pointer to TC0 registers for its channel 0
@@ -153,7 +153,7 @@ inline unsigned int iFunc(float deg)
 void setup()
 {
   initGlobals();
-  initTable(SINEWAVE);
+  initTable(TRIANGLE);
   
   adc_setup();                                         // setup ADC
   
@@ -251,7 +251,7 @@ void ADC_Handler(void)
   }
   else if(dac_mode == SQUARE)
   {
-      if(cycle_count <= halfCycle)
+      if(cycle_count < halfCycle)
         dac_write(maxVal);
       else
         dac_write(0);
@@ -259,10 +259,11 @@ void ADC_Handler(void)
   else if(dac_mode == TRIANGLE)
   {
     unsigned int ramp = cycle_count * (tableSize2 / halfCycle);
-    if(cycle_count < halfCycle)
-      dac_write(ramp)
+    if(ramp <= maxVal)
+      dac_write(ramp);
     else
-      dac_write(tableSize4 - ramp);
+      //dac_write(maxVal - ramp);
+      dac_write(0);
   }
   else if(dac_mode == SAWTOOTH)
   {
@@ -287,7 +288,8 @@ void ADC_Handler(void)
 unsigned int wave_shape = 0;
 void loop()
 {
-  initTable(wave_shape);
+  //initTable(wave_shape);
+  initTable(TRIANGLE);
   for(float f = 50.0f; f < 5000.0f; f += 5.0f)
   {
     setFrequency(f);
@@ -302,6 +304,5 @@ void loop()
   wave_shape++;
   if(wave_shape > 3)
     wave_shape = 0;
-
 }
 
